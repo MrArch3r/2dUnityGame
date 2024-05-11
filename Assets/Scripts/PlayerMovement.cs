@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float smoothTime = 0.05f;
 
     public Animator animator;
+    private bool hasPlayedJumpAfterHurt = false;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -38,10 +39,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (!IsGrounded())
         {
-           animator.SetBool("IsJumping", true);
+            if (!hasPlayedJumpAfterHurt && animator.GetCurrentAnimatorStateInfo(0).IsName("Hurt"))
+            {
+                StartCoroutine(PlayJumpAfterHurt());
+                hasPlayedJumpAfterHurt = true;
+            } else
+            {
+                animator.SetBool("IsJumping", true);
+            }
         } else
         {
            animator.SetBool("IsJumping", false);
+           hasPlayedJumpAfterHurt = false;
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
@@ -55,6 +64,13 @@ public class PlayerMovement : MonoBehaviour
             Destroy(gameObject);
             playerSpawner.RespawnPlayer();
         }
+    }
+
+    private IEnumerator PlayJumpAfterHurt()
+    {
+        animator.SetTrigger("Hurt");
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        animator.SetBool("IsJumping", true);
     }
 
     private void FixedUpdate()
