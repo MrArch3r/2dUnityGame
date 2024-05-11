@@ -21,10 +21,12 @@ public class PlayerCombat : MonoBehaviour
     float nextShootTime = 0;
 
     public PlayerSpawner playerSpawner;
+    public PlayerMovement playerMovement;
 
     void Start()
     {
         playerSpawner = GameObject.FindWithTag("PlayerSpawner").GetComponent<PlayerSpawner>();
+        playerMovement = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
     }
 
     void Update()
@@ -46,6 +48,10 @@ public class PlayerCombat : MonoBehaviour
                 nextAttackTime = Time.time + 1f / attackRate;
             }
         } 
+        if (playerMovement == null) 
+        {
+            playerMovement = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -54,11 +60,19 @@ public class PlayerCombat : MonoBehaviour
         {
             playerHealth = playerHealth - 1;
             animator.SetTrigger("Hurt");
-            if (playerHealth <= 0)
-            {
-                Destroy(gameObject);
-                playerSpawner.RespawnPlayer();
-            }
+        }
+
+        if (collision.gameObject.CompareTag("Spike")) 
+        {
+            playerHealth = playerHealth - 1;
+            animator.SetTrigger("Hurt");
+            playerMovement.SpikeHit();
+        }
+
+        if (playerHealth <= 0)
+        {
+            Destroy(gameObject);
+            playerSpawner.RespawnPlayer();
         }
     }
 

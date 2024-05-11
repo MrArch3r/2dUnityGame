@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 8f;
     public float jumpingPower = 6f;
     private bool isFacingRight = true;
+    public float smoothTime = 0.05f;
 
     public Animator animator;
 
@@ -32,8 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-            
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower); 
         }
 
         if (!IsGrounded())
@@ -59,12 +59,31 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        float targetSpeed = horizontal * speed;
+
+        if (IsGrounded()) 
+        {
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, targetSpeed, smoothTime), rb.velocity.y);
+        } else 
+        {
+            if (horizontal != 0f)
+            {
+                float strafeForceX = speed * (horizontal > 0f ? -1f : 1f);
+                rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, targetSpeed, smoothTime), rb.velocity.y);
+                rb.AddForce(new Vector2(strafeForceX, 0f), ForceMode2D.Force);
+            }
+        }
     }
 
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+    }
+
+    public void SpikeHit() 
+    {   
+        float spikeHorizontalForce = 2f;
+        rb.velocity = new Vector2(spikeHorizontalForce * (isFacingRight ? 1f : -1f), jumpingPower * 0.75f); 
     }
 
     private void Flip()
