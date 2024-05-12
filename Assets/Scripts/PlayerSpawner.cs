@@ -9,15 +9,32 @@ public class PlayerSpawner : MonoBehaviour
     public GameObject player;
     public CinemachineVirtualCamera virtualCamera;
 
+    private float duration;
+    private bool timerActive = false;
+
     void Start()
     {
-        RespawnPlayer();
+        GameObject newPlayer = Instantiate(player, respawnPoint.position, respawnPoint.rotation);
+        virtualCamera.Follow = newPlayer.transform;
+    }
+
+    void Update()
+    {
+        if (timerActive) 
+        {
+            duration -= Time.deltaTime;
+            if (duration <= 0) 
+            {
+                GameObject newPlayer = Instantiate(player, respawnPoint.position, respawnPoint.rotation);
+                virtualCamera.Follow = newPlayer.transform;
+                timerActive = false;
+            }
+        }
     }
 
     public void RespawnPlayer()
     {
-        GameObject newPlayer = Instantiate(player, respawnPoint.position, respawnPoint.rotation);
-
-        virtualCamera.Follow = newPlayer.transform;
+        timerActive = true;
+        duration = 1f;
     }
 }

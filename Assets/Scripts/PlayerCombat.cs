@@ -73,11 +73,11 @@ public class PlayerCombat : MonoBehaviour
 
         if (playerHealth <= 0)
         {
-            GameObject particleSystem = Instantiate(particleSystemPrefab, transform.position, Quaternion.identity);
+            Vector3 particlePos = transform.position + new Vector3(0, 0.5f, 0);
+            GameObject particleSystem = Instantiate(particleSystemPrefab, particlePos, Quaternion.identity);
             particleSystem.GetComponent<ParticleSystem>().Play();
-
-            Destroy(gameObject);
             playerSpawner.RespawnPlayer();
+            Destroy(gameObject);
         }
     }
 
