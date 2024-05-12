@@ -84,9 +84,9 @@ public class PlayerMovement : MonoBehaviour
         {
             if (horizontal != 0f)
             {
-                float strafeForceX = speed * (horizontal > 0f ? -1f : 1f);
+                //float strafeForceX = speed * (horizontal > 0f ? 1f : -1f);
                 rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, targetSpeed, smoothTime), rb.velocity.y);
-                rb.AddForce(new Vector2(strafeForceX, 0f), ForceMode2D.Force);
+                //rb.AddForce(new Vector2(strafeForceX, 0f), ForceMode2D.Force);
             }
         }
     }
