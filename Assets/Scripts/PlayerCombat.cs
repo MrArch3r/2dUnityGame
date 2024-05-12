@@ -20,13 +20,15 @@ public class PlayerCombat : MonoBehaviour
     public float shootRate = 2f;
     float nextShootTime = 0;
 
-    public PlayerSpawner playerSpawner;
-    public PlayerMovement playerMovement;
+    private PlayerSpawner playerSpawner;
+    private PlayerMovement playerMovement;
+    private GameObject particleSystemPrefab;
 
     void Start()
     {
         playerSpawner = GameObject.FindWithTag("PlayerSpawner").GetComponent<PlayerSpawner>();
         playerMovement = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
+        particleSystemPrefab = GameObject.FindWithTag("Death");
     }
 
     void Update()
@@ -71,6 +73,9 @@ public class PlayerCombat : MonoBehaviour
 
         if (playerHealth <= 0)
         {
+            GameObject particleSystem = Instantiate(particleSystemPrefab, transform.position, Quaternion.identity);
+            particleSystem.GetComponent<ParticleSystem>().Play();
+
             Destroy(gameObject);
             playerSpawner.RespawnPlayer();
         }
