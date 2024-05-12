@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - PlayerSpawner
   - Spike
+  - Death
   layers:
   - Default
   - TransparentFX
