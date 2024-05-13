@@ -62,12 +62,14 @@ public class PlayerCombat : MonoBehaviour
         {
             playerHealth = playerHealth - 1;
             animator.SetTrigger("Hurt");
+            nextAttackTime = Time.time;
         }
 
         if (collision.gameObject.CompareTag("Spike")) 
         {
             playerHealth = playerHealth - 1;
             animator.SetTrigger("Hurt");
+            nextAttackTime = Time.time;
             playerMovement.SpikeHit();
         }
 
@@ -89,7 +91,8 @@ public class PlayerCombat : MonoBehaviour
 
     public void Shoot()
     {
-        Instantiate(arrowPrefab, firePoint.position, firePoint.rotation);
+        GameObject arrow = Instantiate(arrowPrefab, firePoint.position, firePoint.rotation);
+        Object.Destroy(arrow, 1.5f);
     }
 
     public void meleeAttack()
