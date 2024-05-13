@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Enemy : MonoBehaviour
 {
     public int maxHealth;
@@ -45,6 +46,7 @@ public class Enemy : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         GetComponent<Rigidbody2D>().gravityScale = 0f;
         //GetComponent<SpriteRenderer>().enabled = false;
+        GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = false;
         this.enabled = false;
     }
 }

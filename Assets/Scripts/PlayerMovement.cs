@@ -19,13 +19,11 @@ public class PlayerMovement : MonoBehaviour
 
     public PlayerSpawner playerSpawner;
 
-    // Start is called before the first frame update
     void Start()
     {
         playerSpawner = GameObject.FindWithTag("PlayerSpawner").GetComponent<PlayerSpawner>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
