@@ -7,26 +7,33 @@ public class Enemy : MonoBehaviour
 {
     public int maxHealth;
     int currentHealth;
-    public GameObject player;
+    private GameObject player;
     bool facingRight = false;
     public Animator animator;
   
     void Start()
     {
         currentHealth = maxHealth;
+        player = GameObject.FindWithTag("Player");
     }
 
     void Update()
     {
-        Vector3 objectPosition = transform.position;
-        if (player.transform.position.x >= objectPosition.x && !facingRight)
+        if (player == null) 
         {
-            transform.Rotate(0f, 180f, 0f);
-            facingRight = true;
-        } else if (player.transform.position.x < objectPosition.x && facingRight)
+            player = GameObject.FindWithTag("Player");
+        } else
         {
-            transform.Rotate(0f, 180f, 0f);
-            facingRight = false;
+            Vector3 objectPosition = transform.position;
+            if (player.transform.position.x >= objectPosition.x && !facingRight)
+            {
+                transform.Rotate(0f, 180f, 0f);
+                facingRight = true;
+            } else if (player.transform.position.x < objectPosition.x && facingRight)
+            {
+                transform.Rotate(0f, 180f, 0f);
+                facingRight = false;
+            }
         }
     }
 
